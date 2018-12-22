@@ -1,0 +1,42 @@
+<?php
+
+require dirname(__DIR__) . '/vendor/autoload.php';
+
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Helper\QuestionHelper;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ChoiceQuestion;
+use Symfony\Component\Console\Style\SymfonyStyle;
+
+(new Application('prepare'))
+    ->register('prepare')
+        ->addArgument('directory', InputArgument::OPTIONAL, 'The directory')
+        ->setCode(function(InputInterface $input, OutputInterface $output) {
+            $io = new SymfonyStyle($input, $output);
+
+            $io->title('Media Preparation Utility');
+
+            $directory = $input->getArgument('directory') ?: dirname(__DIR__);
+
+            $actions = [
+                App\RenameSeasonEpisodes::class => 'Organize Series-based episode files',
+            ];
+            $actionClasses = array_keys($actions);
+
+            $question = new ChoiceQuestion(
+                sprintf('Select an action for directory "%s":', $directory),
+                array_values($actions)
+            );
+            $actionName = (new QuestionHelper)->ask($input, $output, $question);
+            $action = array_search($actionName, $actions);
+            $io->newLine();
+
+            (new $action)->execute($input, $io, $directory);
+        })
+    ->getApplication()
+    ->setDefaultCommand('prepare', true)
+    ->run()
+;

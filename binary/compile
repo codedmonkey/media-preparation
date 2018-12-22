@@ -1,0 +1,10 @@
+<?php
+
+$phar = new \Phar('prepare-media.phar', 0, 'prepare-media.phar');
+
+$iterator = new \RecursiveIteratorIterator(
+    new \RecursiveDirectoryIterator(dirname(__DIR__), \FilesystemIterator::SKIP_DOTS)
+);
+
+$phar->buildFromIterator($iterator, dirname(__DIR__));
+$phar->setStub($phar->createDefaultStub('binary/prepare'));

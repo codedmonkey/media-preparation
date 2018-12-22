@@ -1,0 +1,21 @@
+{
+  "name": "codedmonkey/media-preparation",
+  "description": "Media File Preparation Utility",
+  "type": "project",
+  "authors": [
+    {
+      "name": "Tim Goudriaan",
+      "email": "tim@codedmonkey.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "App\\": "source/"
+    }
+  },
+  "require": {
+    "symfony/console": "^4.0",
+    "symfony/filesystem": "^4.0",
+    "symfony/finder": "^4.0"
+  }
+}
