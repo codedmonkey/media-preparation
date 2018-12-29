@@ -52,6 +52,8 @@ class RenameSeasonEpisodes
             return $metadata['output'];
         }, $files));
 
+        sort($matched);
+
         $output->writeln(sprintf('Matched episodes: %s', implode(', ', $matched)));
         $output->newLine();
 
