@@ -26,7 +26,7 @@ class RenameSeasonEpisodes
         $files = [];
         foreach ($finder as $metadata) {
             /** @var \SplFileInfo $metadata */
-            if (!preg_match('/S(\d*)E(\d*)/', $metadata->getFilename(), $matches)) {
+            if (!preg_match('~S(\d*)E(\d*)~i', $metadata->getFilename(), $matches)) {
                 continue;
             }
 
