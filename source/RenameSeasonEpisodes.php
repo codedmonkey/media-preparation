@@ -25,21 +25,28 @@ class RenameSeasonEpisodes
 
         $files = [];
         foreach ($finder as $metadata) {
-            /** @var \SplFileInfo $metadata */
-            if (!preg_match('~S(\d*)E(\d*)~i', $metadata->getFilename(), $matches)) {
-                continue;
-            }
-
-            list(, $season, $episode) = $matches;
-
-            $file = [
-                'metadata' => $metadata,
-                'season' => $season,
-                'episode' => $episode,
-                'output' => sprintf('s%se%s', $season, $episode),
+            static $patterns = [
+                '~S(\d*)E(\d*)~i',
+                '~(\d*)x(\d*)~i',
             ];
 
-            $files[] = $file;
+            foreach ($patterns as $pattern) {
+                /** @var \SplFileInfo $metadata */
+                if (preg_match($pattern, $metadata->getFilename(), $matches)) {
+                    list(, $season, $episode) = $matches;
+
+                    $file = [
+                        'metadata' => $metadata,
+                        'season' => $season,
+                        'episode' => $episode,
+                        'output' => sprintf('s%se%s', $season, $episode),
+                    ];
+
+                    $files[] = $file;
+
+                    break;
+                }
+            }
         }
 
         if (!count($files)) {
